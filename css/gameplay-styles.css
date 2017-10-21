@@ -1,3 +1,25 @@
 p {
-    font-size: 24px;
+    font-size: 20px;
+}
+
+#gameplay-box-div {
+    margin-left: 400px;
+    height: 750px;
+    width: 1000px;
+    border: black 5px solid;
+    text-align: center;
+}
+
+.start-game-instructions {
+
+}
+
+#gameplay-box-div p {
+    position: relative;
+    top: 300px;
+}
+
+#gameplay-box-div button {
+    position: relative;
+    top: 300px;
 }
