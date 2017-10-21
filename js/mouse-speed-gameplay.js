@@ -1,6 +1,7 @@
 const GAMEPLAY_BOX_DIV_HEIGHT = 750;
 const GAMEPLAY_BOX_DIV_WIDTH = 1000;
 const CIRCLE_DIAMETER = 50;
+const NUMBER_OF_CIRCLES = 5;
 
 document.getElementById("start-game-button").onclick = function() {
     playGame();
@@ -13,17 +14,19 @@ function hideStartGameInstructions() {
     }
 }
 
-function spawnRandomCircle() {
+function spawnRandomCircle(circleNumber) {
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
     var circle = document.createElement("div");
-    circle.setAttribute("id", "circle");
-    setCirclePosition(circle);
+    circle.setAttribute("class", "circle");
+    setCirclePosition(circle, circleNumber);
     gameplayBoxDiv.appendChild(circle);
 }
 
 function playGame() {
     hideStartGameInstructions();
-    spawnRandomCircle();
+    for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
+        spawnRandomCircle(i);
+    }
 }
 
 /*
@@ -43,9 +46,9 @@ function getRandomXCoordinate() {
 }
 
 /* Gives the circle a random position within the gameplay-box-div */
-function setCirclePosition(circle) {
+function setCirclePosition(circle, circleNumber) {
     var x = getRandomXCoordinate();
-    var y = getRandomYCoordinate();
+    var y = getRandomYCoordinate() - (CIRCLE_DIAMETER * circleNumber);
     circle.style.top = y + "px";
     circle.style.left = x + "px";
 }
