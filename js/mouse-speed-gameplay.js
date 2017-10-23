@@ -3,6 +3,13 @@ const GAMEPLAY_BOX_DIV_WIDTH = 1000;
 const CIRCLE_DIAMETER = 50;
 const NUMBER_OF_CIRCLES = 5;
 
+// TODO: possibly deal with these variables in a better way
+var circleTimer = {
+    circlesClicked: 0,
+    start: 0,
+    end: 0,
+};
+
 document.getElementById("start-game-button").onclick = function() {
     playGame();
 }
@@ -19,14 +26,32 @@ function spawnRandomCircle(circleNumber) {
     var circle = document.createElement("div");
     circle.setAttribute("class", "circle");
     setCirclePosition(circle, circleNumber);
+    circle.onclick = function() {
+        circle.style.visibility = "hidden";
+        circleTimer.circlesClicked++;
+        if (circleTimer.circlesClicked == NUMBER_OF_CIRCLES) {
+            circleTimer.end = new Date().getTime();
+            var timeTaken = circleTimer.end - circleTimer.start;
+            console.log("Time taken: " + timeTaken + " ms");
+        }
+    }
     gameplayBoxDiv.appendChild(circle);
+}
+
+function spawnCircles() {
+    for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
+        spawnRandomCircle(i);
+    }
+}
+
+function spawnCirclesAfterDelay() {
+    setTimeout(spawnCircles, 500);
 }
 
 function playGame() {
     hideStartGameInstructions();
-    for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
-        spawnRandomCircle(i);
-    }
+    spawnCirclesAfterDelay();
+    circleTimer.start = new Date().getTime();
 }
 
 /*
@@ -45,7 +70,11 @@ function getRandomXCoordinate() {
     return Math.floor(Math.random() * (GAMEPLAY_BOX_DIV_WIDTH - CIRCLE_DIAMETER + 1));
 }
 
-/* Gives the circle a random position within the gameplay-box-div */
+/*
+ * Gives the circle a random position within the gameplay-box-div.
+ * Since this is compared to it's starting position, have to subtract circle diameter
+ * so all circles start in the top left.
+ */
 function setCirclePosition(circle, circleNumber) {
     var x = getRandomXCoordinate();
     var y = getRandomYCoordinate() - (CIRCLE_DIAMETER * circleNumber);
