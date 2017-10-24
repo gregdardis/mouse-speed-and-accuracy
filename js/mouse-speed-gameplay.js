@@ -22,6 +22,13 @@ function hideStartGameInstructions() {
     }
 }
 
+function showStartGameInstructions() {
+    var startGameInstructions = document.getElementsByClassName("start-game-messages");
+    for (var i = 0; i < startGameInstructions.length; i++) {
+        startGameInstructions[i].style.display = "block";
+    }
+}
+
 function printTimeTakenOnScreen(timeTaken) {
     var timeTakenPara = document.createElement("p");
     var timeTakenMessage = document.createTextNode("Time to click all circles: " + timeTaken + " ms.")
@@ -36,6 +43,15 @@ function calculateAndPrintTime() {
     circleTimer.end = new Date().getTime();
     var timeTaken = circleTimer.end - circleTimer.start;
     printTimeTakenOnScreen(timeTaken);
+    return timeTaken;
+}
+
+function addToAndUpdateScoreArray(timeTaken) {
+    // creates an Array 'scores' if it doesn't already exist
+    scores = (typeof scores != "undefined" && scores instanceof Array ) ? scores : [];
+
+    scores.push(timeTaken);
+    console.log(scores);
 }
 
 function spawnRandomCircle(circleNumber) {
@@ -46,7 +62,9 @@ function spawnRandomCircle(circleNumber) {
         circle.style.visibility = "hidden";
         circleTimer.circlesClicked++;
         if (circleTimer.circlesClicked == NUMBER_OF_CIRCLES) {
-            calculateAndPrintTime();
+            var timeTaken = calculateAndPrintTime();
+            addToAndUpdateScoreArray(timeTaken);
+            showStartGameInstructions();
         }
     }
 
