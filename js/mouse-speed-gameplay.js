@@ -41,6 +41,7 @@ function showStartGameInstructions() {
     }
 }
 
+// TODO: refactor this function to re-use code
 function printTimeTakenOnScreen(timeTaken) {
     if (roundInfo.roundNumber == 1) {
         var timeTakenPara = document.createElement("p");
@@ -80,14 +81,27 @@ function addToAndUpdateScoreArray(timeTaken) {
     scores = (typeof scores != "undefined" && scores instanceof Array ) ? scores : [];
 
     scores.push(timeTaken);
+    scores.sort();
     var localScoresDiv = document.getElementById("local-scores-div");
+    removeAllLocalScores();
+    addUpdatedLocalScores(scores, localScoresDiv);
+}
 
-    var scorePara = document.createElement("p");
-    var score = document.createTextNode(scores[roundInfo.roundNumber - 1] + " ms");
-    scorePara.appendChild(score);
-    scorePara.setAttribute("class", "local-score");
-    localScoresDiv.appendChild(scorePara);
+function addUpdatedLocalScores(scores, localScoresDiv) {
+    for (var i = 0; i < scores.length; i++) {
+        var scorePara = document.createElement("p");
+        var score = document.createTextNode((i + 1) + ". " + scores[i] + " ms");
+        scorePara.appendChild(score);
+        scorePara.setAttribute("class", "local-score");
+        localScoresDiv.appendChild(scorePara);
+    }
+}
 
+function removeAllLocalScores() {
+    var localScores = document.getElementsByClassName("local-score");
+    while(localScores.length > 0) {
+        localScores[0].parentNode.removeChild(localScores[0]);
+    }
 }
 
 function startNextRound() {
