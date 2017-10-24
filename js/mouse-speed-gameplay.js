@@ -3,6 +3,7 @@ const GAMEPLAY_BOX_DIV_WIDTH = 1000;
 const CIRCLE_DIAMETER = 50;
 const NUMBER_OF_CIRCLES = 5;
 const START_GAME_DELAY = 500;
+const BETWEEN_ROUNDS_DELAY = 2000;
 
 // TODO: possibly deal with these variables in a better way
 var circleTimer = {
@@ -25,7 +26,7 @@ function hideStartGameInstructions() {
 function showStartGameInstructions() {
     var startGameInstructions = document.getElementsByClassName("start-game-messages");
     for (var i = 0; i < startGameInstructions.length; i++) {
-        startGameInstructions[i].style.display = "block";
+        startGameInstructions[i].style.display = "";
     }
 }
 
@@ -37,6 +38,13 @@ function printTimeTakenOnScreen(timeTaken) {
 
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
     gameplayBoxDiv.appendChild(timeTakenPara);
+}
+
+function hidePrintedTime() {
+    var timeTakenInfo = document.getElementsByClassName("gameplay-box-messages");
+
+    // time taken paragraph is the third element of the class gameplay-box-messages
+    timeTakenInfo[2].style.display = "none";
 }
 
 function calculateAndPrintTime() {
@@ -54,6 +62,12 @@ function addToAndUpdateScoreArray(timeTaken) {
     console.log(scores);
 }
 
+function startNextRound() {
+    hidePrintedTime();
+    showStartGameInstructions();
+    circleTimer.circlesClicked = 0;
+}
+
 function spawnRandomCircle(circleNumber) {
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
     var circle = createCircle(circleNumber);
@@ -64,7 +78,7 @@ function spawnRandomCircle(circleNumber) {
         if (circleTimer.circlesClicked == NUMBER_OF_CIRCLES) {
             var timeTaken = calculateAndPrintTime();
             addToAndUpdateScoreArray(timeTaken);
-            showStartGameInstructions();
+            setTimeout(startNextRound, BETWEEN_ROUNDS_DELAY);
         }
     }
 
