@@ -42,20 +42,33 @@ function showStartGameInstructions() {
 }
 
 function printTimeTakenOnScreen(timeTaken) {
-    var timeTakenPara = document.createElement("p");
-    var timeTakenMessage = document.createTextNode("Time to click all circles: " + timeTaken + " ms.")
-    timeTakenPara.appendChild(timeTakenMessage);
-    timeTakenPara.className = "gameplay-box-messages";
+    if (roundInfo.roundNumber == 1) {
+        var timeTakenPara = document.createElement("p");
+        var timeTakenMessage = document.createTextNode("Time to click all circles: " + timeTaken + " ms.")
+        timeTakenPara.appendChild(timeTakenMessage);
+        timeTakenPara.className = "gameplay-box-messages";
 
-    var gameplayBoxDiv = document.getElementById("gameplay-box-div");
-    gameplayBoxDiv.appendChild(timeTakenPara);
+        var gameplayBoxDiv = document.getElementById("gameplay-box-div");
+        gameplayBoxDiv.appendChild(timeTakenPara);
+    } else {
+        var gameplayMessages = document.getElementsByClassName("gameplay-box-messages");
+
+        // time taken paragraph is the third element of the class gameplay-box-messages
+        var timeTakenPara = gameplayMessages[2];
+        var timeTakenMessage = document.createTextNode("Time to click all circles: " + timeTaken + " ms.")
+        timeTakenPara.replaceChild(timeTakenMessage, timeTakenPara.childNodes[0]);
+        timeTakenPara.style.display = "";
+
+    }
+
+
 }
 
 function hidePrintedTime() {
-    var timeTakenInfo = document.getElementsByClassName("gameplay-box-messages");
+    var gameplayMessages = document.getElementsByClassName("gameplay-box-messages");
 
     // time taken paragraph is the third element of the class gameplay-box-messages
-    timeTakenInfo[2].style.display = "none";
+    gameplayMessages[2].style.display = "none";
 }
 
 function calculateAndPrintTime() {
