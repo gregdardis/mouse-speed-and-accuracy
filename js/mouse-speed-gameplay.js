@@ -12,8 +12,19 @@ var circleTimer = {
     end: 0,
 };
 
+var roundInfo = {
+    roundNumber: 0
+}
+
 document.getElementById("start-game-button").onclick = function() {
+    roundInfo.roundNumber++;
     playGame();
+}
+
+function playGame() {
+    hideStartGameInstructions();
+    spawnCirclesAfterDelay();
+    circleTimer.start = new Date().getTime();
 }
 
 function hideStartGameInstructions() {
@@ -59,23 +70,24 @@ function addToAndUpdateScoreArray(timeTaken) {
     scores = (typeof scores != "undefined" && scores instanceof Array ) ? scores : [];
 
     scores.push(timeTaken);
-    console.log(scores);
+    // console.log(scores);
 }
 
 function startNextRound() {
     hidePrintedTime();
     showStartGameInstructions();
-    circleTimer.circlesClicked = 0;
+
 }
 
 function spawnRandomCircle(circleNumber) {
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
+    console.log("Circle number: " + circleNumber);
     var circle = createCircle(circleNumber);
 
     circle.onclick = function() {
         circle.style.visibility = "hidden";
         circleTimer.circlesClicked++;
-        if (circleTimer.circlesClicked == NUMBER_OF_CIRCLES) {
+        if ((circleTimer.circlesClicked % NUMBER_OF_CIRCLES) == 0) {
             var timeTaken = calculateAndPrintTime();
             addToAndUpdateScoreArray(timeTaken);
             setTimeout(startNextRound, BETWEEN_ROUNDS_DELAY);
@@ -93,19 +105,13 @@ function createCircle(circleNumber) {
 }
 
 function spawnCircles() {
-    for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
+    for (var i = roundInfo.roundNumber*NUMBER_OF_CIRCLES - NUMBER_OF_CIRCLES; i < roundInfo.roundNumber*NUMBER_OF_CIRCLES; i++) {
         spawnRandomCircle(i);
     }
 }
 
 function spawnCirclesAfterDelay() {
     setTimeout(spawnCircles, START_GAME_DELAY);
-}
-
-function playGame() {
-    hideStartGameInstructions();
-    spawnCirclesAfterDelay();
-    circleTimer.start = new Date().getTime();
 }
 
 /*
@@ -127,7 +133,7 @@ function getRandomXCoordinate() {
 /*
  * Gives the circle a random position within the gameplay-box-div.
  * Since this is compared to it's starting position, have to subtract circle diameter
- * so all circles start in the top left.
+ * multiplied by how many circles have already spawned so all circles start in the top left.
  */
 function setCirclePosition(circle, circleNumber) {
     var x = getRandomXCoordinate();
