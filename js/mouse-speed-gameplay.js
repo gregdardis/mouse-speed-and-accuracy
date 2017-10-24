@@ -58,10 +58,7 @@ function printTimeTakenOnScreen(timeTaken) {
         var timeTakenMessage = document.createTextNode("Time to click all circles: " + timeTaken + " ms.")
         timeTakenPara.replaceChild(timeTakenMessage, timeTakenPara.childNodes[0]);
         timeTakenPara.style.display = "";
-
     }
-
-
 }
 
 function hidePrintedTime() {
@@ -83,18 +80,23 @@ function addToAndUpdateScoreArray(timeTaken) {
     scores = (typeof scores != "undefined" && scores instanceof Array ) ? scores : [];
 
     scores.push(timeTaken);
-    // console.log(scores);
+    var localScoresDiv = document.getElementById("local-scores-div");
+
+    var scorePara = document.createElement("p");
+    var score = document.createTextNode(scores[roundInfo.roundNumber - 1] + " ms");
+    scorePara.appendChild(score);
+    scorePara.setAttribute("class", "local-score");
+    localScoresDiv.appendChild(scorePara);
+
 }
 
 function startNextRound() {
     hidePrintedTime();
     showStartGameInstructions();
-
 }
 
 function spawnRandomCircle(circleNumber) {
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
-    console.log("Circle number: " + circleNumber);
     var circle = createCircle(circleNumber);
 
     circle.onclick = function() {

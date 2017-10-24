@@ -2,6 +2,10 @@
     font-size: 20px;
 }
 
+#local-scores-div {
+    float: left;
+}
+
 #gameplay-box-div {
     margin-left: 400px;
     height: 750px;
