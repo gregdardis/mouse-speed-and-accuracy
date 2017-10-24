@@ -85,12 +85,13 @@ function addToAndUpdateScoreArray(timeTaken) {
     var localScoresDiv = document.getElementById("local-scores-div");
     removeAllLocalScores();
     addUpdatedLocalScores(scores, localScoresDiv);
+    displayAverage(scores, localScoresDiv);
 }
 
 function addUpdatedLocalScores(scores, localScoresDiv) {
     for (var i = 0; i < scores.length; i++) {
         var scorePara = document.createElement("p");
-        var score = document.createTextNode((i + 1) + ". " + scores[i] + " ms");
+        var score = document.createTextNode((i + 1) + ") " + scores[i] + " ms");
         scorePara.appendChild(score);
         scorePara.setAttribute("class", "local-score");
         localScoresDiv.appendChild(scorePara);
@@ -102,6 +103,24 @@ function removeAllLocalScores() {
     while(localScores.length > 0) {
         localScores[0].parentNode.removeChild(localScores[0]);
     }
+}
+
+function displayAverage(scores, localScoresDiv) {
+    var averagePara = document.createElement("p");
+    var averageScore = calculateAverage(scores);
+    var average = document.createTextNode("Average: " + averageScore +  " ms");
+    averagePara.appendChild(average);
+    averagePara.setAttribute("class", "local-score");
+    localScoresDiv.appendChild(averagePara);
+}
+
+function calculateAverage(scores) {
+    var average = 0;
+    for (var i = 0; i < scores.length; i++) {
+        average += scores[i];
+    }
+    average /= scores.length;
+    return Math.round(average);
 }
 
 function startNextRound() {
