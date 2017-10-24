@@ -1,4 +1,4 @@
-p {
+.instructions {
     font-size: 20px;
 }
 
@@ -10,9 +10,13 @@ p {
     text-align: center;
 }
 
-.start-game-instructions {
+.start-game-messages {
     position: relative;
     top: 300px;
+}
+
+.gameplay-box-messages {
+    font-size: 20px;
 }
 
 .circle {
