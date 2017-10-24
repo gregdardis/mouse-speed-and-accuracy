@@ -2,6 +2,7 @@ const GAMEPLAY_BOX_DIV_HEIGHT = 750;
 const GAMEPLAY_BOX_DIV_WIDTH = 1000;
 const CIRCLE_DIAMETER = 50;
 const NUMBER_OF_CIRCLES = 5;
+const START_GAME_DELAY = 500;
 
 // TODO: possibly deal with these variables in a better way
 var circleTimer = {
@@ -31,22 +32,32 @@ function printTimeTakenOnScreen(timeTaken) {
     gameplayBoxDiv.appendChild(timeTakenPara);
 }
 
+function calculateAndPrintTime() {
+    circleTimer.end = new Date().getTime();
+    var timeTaken = circleTimer.end - circleTimer.start;
+    printTimeTakenOnScreen(timeTaken);
+}
+
 function spawnRandomCircle(circleNumber) {
     var gameplayBoxDiv = document.getElementById("gameplay-box-div");
-    var circle = document.createElement("div");
-    circle.setAttribute("class", "circle");
-    setCirclePosition(circle, circleNumber);
+    var circle = createCircle(circleNumber);
+
     circle.onclick = function() {
         circle.style.visibility = "hidden";
         circleTimer.circlesClicked++;
         if (circleTimer.circlesClicked == NUMBER_OF_CIRCLES) {
-            circleTimer.end = new Date().getTime();
-            var timeTaken = circleTimer.end - circleTimer.start;
-            printTimeTakenOnScreen(timeTaken);
-            // console.log("Time taken: " + timeTaken + " ms");
+            calculateAndPrintTime();
         }
     }
+
     gameplayBoxDiv.appendChild(circle);
+}
+
+function createCircle(circleNumber) {
+    var circle = document.createElement("div");
+    circle.setAttribute("class", "circle");
+    setCirclePosition(circle, circleNumber);
+    return circle;
 }
 
 function spawnCircles() {
@@ -56,7 +67,7 @@ function spawnCircles() {
 }
 
 function spawnCirclesAfterDelay() {
-    setTimeout(spawnCircles, 500);
+    setTimeout(spawnCircles, START_GAME_DELAY);
 }
 
 function playGame() {
