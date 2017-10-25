@@ -22,6 +22,7 @@ body {
     width: 1000px;
     border: black 5px solid;
     text-align: center;
+    background-color: #DDE1F5;
 }
 
 .start-game-messages {
